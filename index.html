@@ -73,9 +73,8 @@
             // Utwórz nowy dokument PDF
             const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes);
 
-            // Wczytanie czcionki TrueType (np. DejaVu Sans)
-            const fontBytes = await fetch("https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.0.0/fonts/DejaVuSans.ttf").then(res => res.arrayBuffer());
-            const font = await pdfDoc.embedFont(fontBytes);
+            // Użycie domyślnej czcionki Helvetica
+            const font = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
 
             // Edytuj dokument (pierwsza strona)
             const pages = pdfDoc.getPages();
