@@ -2,8 +2,14 @@ document.getElementById("pdf-form").addEventListener("submit", async (event) => 
     event.preventDefault();
 
     const name = document.getElementById("name").value;
-    const email = document.getElementById("email").value;
+    const PESEL = document.getElementById("PESEL").value;
     const phone = document.getElementById("phone").value;
+
+    // Walidacja PESEL - sprawdzamy, czy PESEL ma 11 cyfr
+    if (!/^\d{11}$/.test(PESEL)) {
+        alert("Numer PESEL musi składać się z dokładnie 11 cyfr.");
+        return;  // Zatrzymujemy wykonanie skryptu, jeśli walidacja nie przejdzie
+    }
 
     // Wczytaj szablon PDF
     const url = "template.pdf";
@@ -16,7 +22,7 @@ document.getElementById("pdf-form").addEventListener("submit", async (event) => 
     const pages = pdfDoc.getPages();
     const firstPage = pages[0];
     firstPage.drawText(`${name}`, { x: 138, y: 625, size: 15 });
-    firstPage.drawText(`${email}`, { x: 90, y: 599, size: 15 });
+    firstPage.drawText(`${PESEL}`, { x: 90, y: 602, size: 15 });
     firstPage.drawText(`${phone}`, { x: 165, y: 577, size: 15 });
 
     // Generuj plik PDF do pobrania
@@ -24,6 +30,8 @@ document.getElementById("pdf-form").addEventListener("submit", async (event) => 
     const blob = new Blob([pdfBytes], { type: "application/pdf" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = "generated.pdf";
+    
+    // Ustaw nazwę pliku na numer PESEL
+    link.download = `${PESEL}.pdf`;
     link.click();
 });
