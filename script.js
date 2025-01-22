@@ -1,29 +1,34 @@
-document.getElementById("pdf-form").addEventListener("submit", async (event) => {
-    event.preventDefault();
+import { PDFDocument } from 'https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js';
 
-    const name = document.getElementById("name").value;
-    const email = document.getElementById("email").value;
-    const phone = document.getElementById("phone").value;
+document.getElementById('pdf-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-    // Wczytaj szablon PDF
-    const url = "template.pdf";
-    const existingPdfBytes = await fetch(url).then(res => res.arrayBuffer());
+    // Pobierz wartości z formularza
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
 
-    // Utwórz nowy dokument PDF
-    const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes);
+    // Pobierz szablon PDF
+    const existingPdfBytes = await fetch('template.pdf').then((res) =>
+        res.arrayBuffer()
+    );
 
-    // Edytuj dokument
-    const pages = pdfDoc.getPages();
-    const firstPage = pages[0];
-    firstPage.drawText(`Name: ${name}`, { x: 50, y: 700, size: 12 });
-    firstPage.drawText(`Email: ${email}`, { x: 50, y: 680, size: 12 });
-    firstPage.drawText(`Phone: ${phone}`, { x: 50, y: 660, size: 12 });
+    // Załaduj PDF
+    const pdfDoc = await PDFDocument.load(existingPdfBytes);
 
-    // Generuj plik PDF do pobrania
+    // Pobierz pola formularza
+    const form = pdfDoc.getForm();
+    form.getTextField('nameField').setText(name);
+    form.getTextField('emailField').setText(email);
+    form.getTextField('phoneField').setText(phone);
+
+    // Pobierz zaktualizowany PDF
     const pdfBytes = await pdfDoc.save();
-    const blob = new Blob([pdfBytes], { type: "application/pdf" });
-    const link = document.createElement("a");
+
+    // Pobierz plik na komputer użytkownika
+    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+    const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = "generated.pdf";
+    link.download = 'filled-form.pdf';
     link.click();
 });
