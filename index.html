@@ -52,12 +52,12 @@
         document.getElementById("pdf-form").addEventListener("submit", async (event) => {
             event.preventDefault();
 
-            const name = document.getElementById("Imię i Nazwisko").value;
+            const name = document.getElementById("name").value;
             const PESEL = document.getElementById("PESEL").value;
-            const phone = document.getElementById("Telefon").value;
-            const date = document.getElementById("Data").value;
-            const extra1 = document.getElementById("Imie i Nazwisko Pacjenta").value;
-            const extra2 = document.getElementById("PESEL Pacjenta").value;
+            const phone = document.getElementById("phone").value;
+            const date = document.getElementById("date").value;
+            const extra1 = document.getElementById("extra1").value;
+            const extra2 = document.getElementById("extra2").value;
 
             // Wczytaj szablon PDF
             const url = "template.pdf";
