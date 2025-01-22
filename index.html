@@ -28,6 +28,12 @@
             <input type="text" id="date" value="" readonly>
         </label><br>
 
+        <!-- Adres zamieszkania -->
+        <label>
+            Adres zamieszkania:
+            <input type="text" id="address" required>
+        </label><br>
+
         <!-- Dodatkowe pola -->
         <h3>Dodatkowe informacje:</h3>
         <label>
@@ -37,12 +43,6 @@
         <label>
             Pole dodatkowe 2:
             <input type="text" id="extra2">
-        </label><br>
-
-        <!-- Adres zamieszkania -->
-        <label>
-            Adres zamieszkania:
-            <input type="text" id="address">
         </label><br>
 
         <button type="submit">Generuj PDF</button>
@@ -73,18 +73,22 @@
             // Utwórz nowy dokument PDF
             const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes);
 
+            // Wczytanie czcionki TrueType (np. DejaVu Sans)
+            const fontBytes = await fetch("https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.0.0/fonts/DejaVuSans.ttf").then(res => res.arrayBuffer());
+            const font = await pdfDoc.embedFont(fontBytes);
+
             // Edytuj dokument (pierwsza strona)
             const pages = pdfDoc.getPages();
             const firstPage = pages[0];
 
             // Wstawienie danych do odpowiednich miejsc (współrzędne: x=100, y=100)
-            firstPage.drawText(`${name}`, { x: 140, y: 623, size: 15 });
-            firstPage.drawText(`${PESEL}`, { x: 90, y: 599, size: 15 });
-            firstPage.drawText(`${phone}`, { x: 230, y: 551, size: 15 });
-            firstPage.drawText(`${date}`, { x: 420, y: 802, size: 15 });
-            firstPage.drawText(`${extra1}`, { x: 142, y: 476, size: 15 });
-            firstPage.drawText(`${extra2}`, { x: 91, y: 451, size: 15 });
-            firstPage.drawText(`${address}`, { x: 165, y: 576, size: 15 });
+            firstPage.drawText(`${name}`, { x: 100, y: 500, size: 15, font: font });
+            firstPage.drawText(`${PESEL}`, { x: 100, y: 470, size: 15, font: font });
+            firstPage.drawText(`${phone}`, { x: 100, y: 440, size: 15, font: font });
+            firstPage.drawText(`${date}`, { x: 100, y: 410, size: 15, font: font });
+            firstPage.drawText(`${address}`, { x: 100, y: 380, size: 15, font: font });
+            firstPage.drawText(`${extra1}`, { x: 100, y: 350, size: 15, font: font });
+            firstPage.drawText(`${extra2}`, { x: 100, y: 320, size: 15, font: font });
 
             // Generowanie pliku PDF do pobrania
             const pdfBytes = await pdfDoc.save();
