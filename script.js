@@ -82,7 +82,7 @@
             const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes);
 
             // Załaduj czcionkę (w tym samym folderze, w którym jest HTML)
-            const fontUrl = "DejaVuSans.ttf"; // Zmień jeśli Twoja czcionka jest w innym folderze
+            const fontUrl = "https://github.com/frankesv/up/blob/main/DejaVuSans.ttf"; // Zmień jeśli Twoja czcionka jest w innym folderze
             const fontBytes = await fetch(fontUrl).then(res => res.arrayBuffer());
             const font = await pdfDoc.embedFont(fontBytes);
 
