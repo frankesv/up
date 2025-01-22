@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PDF Generator</title>
     <script src="https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fontkit@2.0.4/+esm"></script>
 </head>
 <body>
     <form id="pdf-form">
@@ -28,12 +29,6 @@
             <input type="text" id="date" value="" readonly>
         </label><br>
 
-        <!-- Adres zamieszkania (przeniesione do głównych pól) -->
-        <label>
-            Adres zamieszkania:
-            <input type="text" id="address" required>
-        </label><br>
-
         <!-- Dodatkowe pola -->
         <h3>Dodatkowe informacje:</h3>
         <label>
@@ -43,6 +38,12 @@
         <label>
             Pole dodatkowe 2:
             <input type="text" id="extra2">
+        </label><br>
+
+        <!-- Adres zamieszkania -->
+        <label>
+            Adres zamieszkania:
+            <input type="text" id="address">
         </label><br>
 
         <button type="submit">Generuj PDF</button>
@@ -74,7 +75,7 @@
             const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes);
 
             // Załaduj czcionkę
-            const fontUrl = "DejaVuSans.ttf"; // Zmieniona ścieżka do lokalnego pliku czcionki
+            const fontUrl = "DejaVuSans.ttf";
             const fontBytes = await fetch(fontUrl).then(res => res.arrayBuffer());
             const font = await pdfDoc.embedFont(fontBytes);
 
