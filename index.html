@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PDF Generator</title>
     <script src="https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fontkit"></script> <!-- Dodaj fontkit -->
 </head>
 <body>
     <form id="pdf-form">
@@ -50,9 +49,9 @@
     </form>
 
     <script>
-        // Ustawienie bieżącej daty (w Polsce)
+        // Ustawienie bieżącej daty (w Polsce) bez godziny
         const date = new Date();
-        const formattedDate = date.toLocaleString("pl-PL", { timeZone: "Europe/Warsaw" });
+        const formattedDate = date.toLocaleDateString("pl-PL", { timeZone: "Europe/Warsaw" });
         document.getElementById("date").value = formattedDate;
 
         // Funkcja generująca PDF
@@ -77,8 +76,7 @@
             // Załaduj czcionkę
             const fontUrl = "DejaVuSans.ttf"; // Zmieniona ścieżka do lokalnego pliku czcionki
             const fontBytes = await fetch(fontUrl).then(res => res.arrayBuffer());
-            const fontkit = window.fontkit; // Zainicjuj fontkit
-            const font = await pdfDoc.embedFont(fontBytes, { fontkit });
+            const font = await pdfDoc.embedFont(fontBytes);
 
             // Edytuj dokument (pierwsza strona)
             const pages = pdfDoc.getPages();
