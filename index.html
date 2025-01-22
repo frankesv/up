@@ -51,7 +51,7 @@
     <script>
         // Ustawienie bieżącej daty (w Polsce)
         const date = new Date();
-        const formattedDate = date.toLocaleString("pl-PL", { timeZone: "Europe/Warsaw" });
+        const formattedDate = date.toLocaleDateString("pl-PL"); // Format: DD.MM.YYYY
         document.getElementById("date").value = formattedDate;
 
         // Funkcja generująca PDF
