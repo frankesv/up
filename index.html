@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PDF Generator</title>
     <script src="https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fontkit@1.8.0/dist/fontkit.js"></script>
 </head>
 <body>
     <form id="pdf-form">
@@ -29,7 +28,7 @@
             <input type="text" id="date" value="" readonly>
         </label><br>
 
-        <!-- Adres zamieszkania -->
+        <!-- Adres zamieszkania (przeniesione do głównych pól) -->
         <label>
             Adres zamieszkania:
             <input type="text" id="address" required>
@@ -52,7 +51,7 @@
     <script>
         // Ustawienie bieżącej daty (w Polsce)
         const date = new Date();
-        const formattedDate = date.toLocaleDateString("pl-PL"); // Format: DD.MM.YYYY
+        const formattedDate = date.toLocaleString("pl-PL", { timeZone: "Europe/Warsaw" });
         document.getElementById("date").value = formattedDate;
 
         // Funkcja generująca PDF
@@ -68,39 +67,4 @@
             const address = document.getElementById("address").value;
 
             // Wczytaj szablon PDF
-            const url = "template.pdf";
-            const existingPdfBytes = await fetch(url).then(res => res.arrayBuffer());
-
-            // Utwórz nowy dokument PDF
-            const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes);
-
-            // Pobierz czcionkę DejaVuSans (obsługującą polskie znaki)
-            const fontBytes = await fetch("DejaVuSans.ttf").then(res => res.arrayBuffer());
-            const font = await pdfDoc.embedFont(fontBytes);
-
-            // Edytuj dokument (pierwsza strona)
-            const pages = pdfDoc.getPages();
-            const firstPage = pages[0];
-
-            // Wstawienie danych do odpowiednich miejsc (współrzędne: x=100, y=100)
-            firstPage.drawText(`${name}`, { x: 140, y: 623, size: 15 });
-            firstPage.drawText(`${PESEL}`, { x: 90, y: 599, size: 15 });
-            firstPage.drawText(`${phone}`, { x: 230, y: 551, size: 15 });
-            firstPage.drawText(`${date}`, { x: 420, y: 802, size: 15 });
-            firstPage.drawText(`${address}`, { x: 165, y: 576, size: 15 });
-            firstPage.drawText(`${extra1}`, { x: 142, y: 476, size: 15 });
-            firstPage.drawText(`${extra2}`, { x: 91, y: 451, size: 15 });
-
-            // Generowanie pliku PDF do pobrania
-            const pdfBytes = await pdfDoc.save();
-            const blob = new Blob([pdfBytes], { type: "application/pdf" });
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-
-            // Ustawienie nazwy pliku na numer PESEL
-            link.download = `${PESEL}.pdf`;
-            link.click();
-        });
-    </script>
-</body>
-</html>
+            const url = "template
