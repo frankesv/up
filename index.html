@@ -4,23 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PDF Generator</title>
+    <script src="https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js"></script>
 </head>
 <body>
     <form id="pdf-form">
         <label>
             Name:
             <input type="text" id="name" required>
-        </label>
+        </label><br>
         <label>
             Email:
             <input type="email" id="email" required>
-        </label>
+        </label><br>
         <label>
             Phone:
             <input type="text" id="phone" required>
-        </label>
+        </label><br>
         <button type="submit">Generate PDF</button>
     </form>
-    <script type="module" src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
