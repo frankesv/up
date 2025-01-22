@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PDF Generator</title>
+    <!-- Dodanie fontkit -->
+    <script src="https://cdn.jsdelivr.net/npm/fontkit@1.8.0/dist/fontkit.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js"></script>
 </head>
 <body>
@@ -49,6 +51,12 @@
     </form>
 
     <script>
+        // Zainstalowanie fontkit w PDFLib
+        const fontkit = window.fontkit;
+
+        // Rejestracja fontkit w PDFLib
+        PDFLib.PDFDocument.registerFontkit(fontkit);
+
         // Ustawienie bieżącej daty (w Polsce)
         const date = new Date();
         const formattedDate = date.toLocaleString("pl-PL", { timeZone: "Europe/Warsaw" });
@@ -67,24 +75,29 @@
             const address = document.getElementById("address").value;
 
             // Wczytaj szablon PDF
-            const url = "template.pdf";
+            const url = "template.pdf"; // Zmien ścieżkę do swojego szablonu
             const existingPdfBytes = await fetch(url).then(res => res.arrayBuffer());
 
             // Utwórz nowy dokument PDF
             const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes);
 
+            // Załaduj czcionkę (w tym samym folderze, w którym jest HTML)
+            const fontUrl = "DejaVuSans.ttf"; // Zmień jeśli Twoja czcionka jest w innym folderze
+            const fontBytes = await fetch(fontUrl).then(res => res.arrayBuffer());
+            const font = await pdfDoc.embedFont(fontBytes);
+
             // Edytuj dokument (pierwsza strona)
             const pages = pdfDoc.getPages();
             const firstPage = pages[0];
 
-            // Wstawienie danych do odpowiednich miejsc (współrzędne: x=100, y=100)
-            firstPage.drawText(`${name}`, { x: 140, y: 623, size: 15 });
-            firstPage.drawText(`${PESEL}`, { x: 90, y: 599, size: 15 });
-            firstPage.drawText(`${phone}`, { x: 230, y: 551, size: 15 });
-            firstPage.drawText(`${date}`, { x: 420, y: 802, size: 15 });
-            firstPage.drawText(`${extra1}`, { x: 142, y: 476, size: 15 });
-            firstPage.drawText(`${extra2}`, { x: 91, y: 451, size: 15 });
-            firstPage.drawText(`${address}`, { x: 165, y: 576, size: 15 });
+            // Wstawienie danych do odpowiednich miejsc
+            firstPage.drawText(`${name}`, { x: 140, y: 623, size: 15, font: font });
+            firstPage.drawText(`${PESEL}`, { x: 90, y: 599, size: 15, font: font });
+            firstPage.drawText(`${phone}`, { x: 230, y: 551, size: 15, font: font });
+            firstPage.drawText(`${date}`, { x: 420, y: 802, size: 15, font: font });
+            firstPage.drawText(`${extra1}`, { x: 142, y: 476, size: 15, font: font });
+            firstPage.drawText(`${extra2}`, { x: 91, y: 451, size: 15, font: font });
+            firstPage.drawText(`${address}`, { x: 165, y: 576, size: 15, font: font });
 
             // Generowanie pliku PDF do pobrania
             const pdfBytes = await pdfDoc.save();
