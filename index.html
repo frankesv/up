@@ -70,12 +70,14 @@
             const url = "template.pdf";
             const existingPdfBytes = await fetch(url).then(res => res.arrayBuffer());
 
+            // Wczytaj czcionkę DejaVuSans (w tym przypadku zakładając, że jest w tym samym folderze)
+            const fontUrl = "/DejaVuSans.ttf";  // Ścieżka do czcionki
+            const fontBytes = await fetch(fontUrl).then(res => res.arrayBuffer());
+
             // Utwórz nowy dokument PDF
             const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes);
 
-            // Załaduj czcionkę
-            const fontUrl = "DejaVuSans.ttf"; // Zmieniona ścieżka do lokalnego pliku czcionki
-            const fontBytes = await fetch(fontUrl).then(res => res.arrayBuffer());
+            // Osadź czcionkę
             const font = await pdfDoc.embedFont(fontBytes);
 
             // Edytuj dokument (pierwsza strona)
