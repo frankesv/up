@@ -15,9 +15,9 @@ document.getElementById("pdf-form").addEventListener("submit", async (event) => 
     // Edytuj dokument
     const pages = pdfDoc.getPages();
     const firstPage = pages[0];
-    firstPage.drawText(`${name}`, { x: 138, y: 635, size: 15 });
-    firstPage.drawText(`${email}`, { x: 90, y: 609, size: 15 });
-    firstPage.drawText(`${phone}`, { x: 165, y: 587, size: 15 });
+    firstPage.drawText(`${name}`, { x: 138, y: 625, size: 15 });
+    firstPage.drawText(`${email}`, { x: 90, y: 599, size: 15 });
+    firstPage.drawText(`${phone}`, { x: 165, y: 577, size: 15 });
 
     // Generuj plik PDF do pobrania
     const pdfBytes = await pdfDoc.save();
