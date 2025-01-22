@@ -8,8 +8,9 @@
 </head>
 <body>
     <form id="pdf-form">
+        <!-- Główne pola -->
         <label>
-            Name:
+            Imię i Nazwisko:
             <input type="text" id="name" required>
         </label><br>
         <label>
@@ -17,11 +18,76 @@
             <input type="text" id="PESEL" pattern="^\d{11}$" maxlength="11" required>
         </label><br>
         <label>
-            Phone:
+            Numer telefonu:
             <input type="text" id="phone" required>
         </label><br>
-        <button type="submit">Generate PDF</button>
+
+        <!-- Data dzisiejsza -->
+        <label>
+            Data:
+            <input type="text" id="date" value="" readonly>
+        </label><br>
+
+        <!-- Dodatkowe pola -->
+        <h3>Dodatkowe informacje:</h3>
+        <label>
+            Pole dodatkowe 1:
+            <input type="text" id="extra1">
+        </label><br>
+        <label>
+            Pole dodatkowe 2:
+            <input type="text" id="extra2">
+        </label><br>
+
+        <button type="submit">Generuj PDF</button>
     </form>
-    <script src="script.js"></script>
+
+    <script>
+        // Ustawienie bieżącej daty (w Polsce)
+        const date = new Date();
+        const formattedDate = date.toLocaleString("pl-PL", { timeZone: "Europe/Warsaw" });
+        document.getElementById("date").value = formattedDate;
+
+        // Funkcja generująca PDF
+        document.getElementById("pdf-form").addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const name = document.getElementById("Imię i Nazwisko").value;
+            const PESEL = document.getElementById("PESEL").value;
+            const phone = document.getElementById("Telefon").value;
+            const date = document.getElementById("Data").value;
+            const extra1 = document.getElementById("Imie i Nazwisko Pacjenta").value;
+            const extra2 = document.getElementById("PESEL Pacjenta").value;
+
+            // Wczytaj szablon PDF
+            const url = "template.pdf";
+            const existingPdfBytes = await fetch(url).then(res => res.arrayBuffer());
+
+            // Utwórz nowy dokument PDF
+            const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes);
+
+            // Edytuj dokument
+            const pages = pdfDoc.getPages();
+            const firstPage = pages[0];
+
+            // Wstaw dane do dokumentu (współrzędne x: 100, y: 100)
+            firstPage.drawText(`${name}`, { x: 100, y: 100, size: 15 });
+            firstPage.drawText(`${PESEL}`, { x: 100, y: 100, size: 15 });
+            firstPage.drawText(`${phone}`, { x: 100, y: 100, size: 15 });
+            firstPage.drawText(`${date}`, { x: 100, y: 100, size: 15 });
+            firstPage.drawText(`${extra1}`, { x: 100, y: 100, size: 15 });
+            firstPage.drawText(`${extra2}`, { x: 100, y: 100, size: 15 });
+
+            // Generuj plik PDF do pobrania
+            const pdfBytes = await pdfDoc.save();
+            const blob = new Blob([pdfBytes], { type: "application/pdf" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            
+            // Ustaw nazwę pliku na numer PESEL
+            link.download = `${PESEL}.pdf`;
+            link.click();
+        });
+    </script>
 </body>
 </html>
