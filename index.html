@@ -39,6 +39,12 @@
             <input type="text" id="extra2">
         </label><br>
 
+        <!-- Adres zamieszkania -->
+        <label>
+            Adres zamieszkania:
+            <input type="text" id="address">
+        </label><br>
+
         <button type="submit">Generuj PDF</button>
     </form>
 
@@ -58,6 +64,7 @@
             const date = document.getElementById("date").value;
             const extra1 = document.getElementById("extra1").value;
             const extra2 = document.getElementById("extra2").value;
+            const address = document.getElementById("address").value;
 
             // Wczytaj szablon PDF
             const url = "template.pdf";
@@ -66,25 +73,26 @@
             // Utwórz nowy dokument PDF
             const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes);
 
-            // Edytuj dokument
+            // Edytuj dokument (pierwsza strona)
             const pages = pdfDoc.getPages();
             const firstPage = pages[0];
 
-            // Wstaw dane do dokumentu (współrzędne x: 100, y: 100)
-            firstPage.drawText(`${name}`, { x: 100, y: 100, size: 15 });
-            firstPage.drawText(`${PESEL}`, { x: 100, y: 100, size: 15 });
-            firstPage.drawText(`${phone}`, { x: 100, y: 100, size: 15 });
-            firstPage.drawText(`${date}`, { x: 100, y: 100, size: 15 });
-            firstPage.drawText(`${extra1}`, { x: 100, y: 100, size: 15 });
-            firstPage.drawText(`${extra2}`, { x: 100, y: 100, size: 15 });
+            // Wstawienie danych do odpowiednich miejsc (współrzędne: x=100, y=100)
+            firstPage.drawText(`${name}`, { x: 140, y: 623, size: 15 });
+            firstPage.drawText(`${PESEL}`, { x: 90, y: 599, size: 15 });
+            firstPage.drawText(`${phone}`, { x: 230, y: 551, size: 15 });
+            firstPage.drawText(`${date}`, { x: 420, y: 802, size: 15 });
+            firstPage.drawText(`${extra1}`, { x: 142, y: 476, size: 15 });
+            firstPage.drawText(`${extra2}`, { x: 91, y: 451, size: 15 });
+            firstPage.drawText(`${address}`, { x: 165, y: 576, size: 15 });
 
-            // Generuj plik PDF do pobrania
+            // Generowanie pliku PDF do pobrania
             const pdfBytes = await pdfDoc.save();
             const blob = new Blob([pdfBytes], { type: "application/pdf" });
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
-            
-            // Ustaw nazwę pliku na numer PESEL
+
+            // Ustawienie nazwy pliku na numer PESEL
             link.download = `${PESEL}.pdf`;
             link.click();
         });
