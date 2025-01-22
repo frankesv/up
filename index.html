@@ -74,7 +74,7 @@
             const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes);
 
             // Pobierz czcionkę DejaVuSans (obsługującą polskie znaki)
-            const fontBytes = await fetch("https://github.com/frankesv/up/raw/refs/heads/main/DejaVuSans.ttf").then(res => res.arrayBuffer());
+            const fontBytes = await fetch("DejaVuSans.ttf").then(res => res.arrayBuffer());
             const font = await pdfDoc.embedFont(fontBytes);
 
             // Edytuj dokument (pierwsza strona)
